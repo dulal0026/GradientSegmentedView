@@ -8,6 +8,8 @@ import UIKit
 
 class SegmentedView: UIView {
     
+    var didSelectItem:(Int)-> Void = { _ in }
+    
     var viewModel: SegmentedViewModel?{
         didSet {
             reloadData()
@@ -48,7 +50,6 @@ class SegmentedView: UIView {
     }
     
     private func setupGradientBorder() {
-        // Configure gradient colors
         gradientLayer.colors = [
             UIColor(hex: "#E1A63E").cgColor,
             UIColor(hex: "#7B5B22").cgColor
@@ -57,8 +58,7 @@ class SegmentedView: UIView {
         gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
         gradientLayer.frame = bounds
         
-        // Mask the gradient with the shape layer (border path)
-        shapeLayer.lineWidth = 4 // border width
+        shapeLayer.lineWidth = 4
         shapeLayer.fillColor = UIColor.clear.cgColor
         shapeLayer.strokeColor = UIColor.black.cgColor // will be masked by gradient
         let path = UIBezierPath(roundedRect: bounds.insetBy(dx: 2, dy: 2), cornerRadius: 8)
@@ -66,7 +66,6 @@ class SegmentedView: UIView {
         
         gradientLayer.mask = shapeLayer
         
-        // Add the gradient layer to the view
         layer.addSublayer(gradientLayer)
         self.backgroundColor = .black
     }
@@ -74,7 +73,6 @@ class SegmentedView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        // Update layers' frame and path on layout changes
         gradientLayer.frame = bounds
         let path = UIBezierPath(roundedRect: bounds.insetBy(dx: 2, dy: 2), cornerRadius: 8)
         shapeLayer.path = path.cgPath
@@ -104,14 +102,14 @@ class SegmentedView: UIView {
         }
         let taag = sender.view?.tag ?? 0
         viewModel.selectedIndex = taag
-        
-        print(taag)
+      
         for index in 0..<stackView.arrangedSubviews.count {
             if let itemView: SegmentedItemView = stackView.arrangedSubviews[index] as? SegmentedItemView {
                 itemView.viewModel?.isSelected = taag == index
                 itemView.updateSelection()
             }
         }
+        didSelectItem(viewModel.selectedIndex)
     }
     
 }

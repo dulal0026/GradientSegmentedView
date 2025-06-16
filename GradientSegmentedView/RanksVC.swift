@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  RanksVC.swift
 //  GradientSegmentedView
 //
 //  Created by Dulal Hossain on 17/6/25.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class RanksVC: UIViewController {
 
     var segmentedControl: SegmentedView = {
         let sView: SegmentedView = SegmentedView(frame: .zero)
@@ -27,6 +27,10 @@ class ViewController: UIViewController {
         segmentedControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
         
         segmentedControl.viewModel = .init(items: ["Daily", "Weekly", "Monthly"])
+        
+        segmentedControl.didSelectItem = { selectedIndex in
+            print("Selected Item index: \(selectedIndex)")
+        }
     }
 
 }
